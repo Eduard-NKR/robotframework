@@ -1,0 +1,125 @@
+*** Settings ***
+Documentation  A resource file containing the application specific keywords
+...            that create our own domain specific language. This resource
+...            implements keywords for testing HTML version of the test
+...            application.
+Library        Selenium2Library 
+Library        BuiltIn
+
+*** Variables ***
+${SERVER}        gmail.com 
+${BROWSER}       gc
+${BROWSER}       ff 
+${DELAY}         1
+${INVALID USERNAME}      invalidframework
+${INVALID PASSWORD}      invalidpass
+${USERNAME}      frameworkrobot 
+${PASSWORD}      robot!test2015
+${LOGIN URL}     https://${SERVER}
+${URL INBOX}     https://mail.google.com/mail/#inbox
+${URL NEW}       https://mail.google.com/mail/#inbox?compose=new
+${URL SENT}      https://mail.google.com/mail/#sent
+${URL DRAFT}     https://mail.google.com/mail/#drafts
+${URL GP}        https://play.google.com/store?hl=en&tab=m8
+
+*** Keywords ***
+Open Browser To Login Page
+    Open Browser  ${login url}  ${browser}
+#    Maximize Browser Window
+    Set Selenium Speed  ${delay}
+    Title Should Be    Gmail  
+
+Invalid Login Process
+# Input invalid Username
+    Input Text    css=#Email    ${invalid username}
+# Click on Next button
+    Click Button    css=#next
+    Element Text Should Be    id=errormsg_0_Email    Sorry, Google doesn't recognize that email.  
+# Input valid Username
+    Input Text    css=#Email    ${username}
+# Click on Next button
+    Click Button    css=#next
+# Enter invalid Password
+    Input Text    css=#Passwd    ${invalid password}
+# Click on Sign in button 
+    Click Button    css=#signIn
+    Element Text Should Be    xpath=/html/body/div/div[2]/div[2]/div[1]/form/div[2]/div/div[2]/span    The email and password you entered don't match. 
+# Click on "back-arrow" button
+    Click Element    id=back-arrow
+
+Login Process
+# Input valid Username
+    Input Text    css=#Email    ${username}
+# Click on Next button
+    Click Button    css=#next
+# Enter valid Password
+    Input Text    css=#Passwd    ${password}
+# Unselect "Stay signed in" checkbox
+    Unselect Checkbox    css=#PersistentCookie
+# Click on Sign in button 
+    Click Button    css=#signIn
+    Wait Until Page Contains    text=Gmail
+
+Write new message
+# Go to new message URL
+    Go To    ${url new}
+# New message window
+    Wait until page contains element    xpath=/html/body/div[13]/div/div/div/div[1]/div[3]/div[1]/div[1]/div/div/div/div[3]/div
+# To field
+    Input Text    name=to    frameworkrobot@gmail.com
+# Subject field
+    Input Text    name=subjectbox    Sample Message  
+# Textbox field
+    Input Text    xpath=/html/body/div[13]/div/div/div/div[1]/div[3]/div[1]/div[1]/div/div/div/div[3]/div/div/div[4]/table/tbody/tr/td[2]/table/tbody/tr[1]/td/div/div[1]/div[2]/div[1]/div/table/tbody/tr/td[2]/div[2]/div    Hello I am Robotframework.\n How are you?  
+# Click on Send button     
+    Click Element    xpath=/html/body/div[13]/div/div/div/div[1]/div[3]/div[1]/div[1]/div/div/div/div[3]/div/div/div[4]/table/tbody/tr/td[2]/table/tbody/tr[2]/td/div/div/div[4]/table/tbody/tr/td[1]/div/div[2] 
+
+Delete written message 
+# Go to Sent message URL
+    Go To    ${url sent}
+# Select checkbox All
+    Click Element    xpath=/html/body/div[7]/div[3]/div/div[2]/div[1]/div[2]/div/div/div/div[1]/div[2]/div[1]/div[1]/div/div/div[1]/div/div[1]/span/div
+# Click on Delete button
+    Click Element    xpath=/html/body/div[7]/div[3]/div/div[2]/div[1]/div[2]/div/div/div/div[1]/div[2]/div[1]/div[1]/div/div/div[2]/div[3]/div/div
+# Confirm the deletion
+    Click Button    name=ok    
+
+Check Terms text link
+# Go to draft URL
+    Go To    ${url draft}
+# Text Terms 
+    Element Text Should Be    xpath=/html/body/div[7]/div[3]/div/div[2]/div[1]/div[2]/div/div/div/div[2]/div[1]/div[2]/div/div[3]/div/div/div/a[1]    Terms
+
+Google Apps
+# Open Google Apps 
+    Click Element    xpath=/html/body/div[7]/div[3]/div/div[1]/div[4]/div[1]/div[1]/div[1]/div/div[2]/div[1]/a
+# Click on More link
+    Click Element    xpath=/html/body/div[7]/div[3]/div/div[1]/div[4]/div[1]/div[1]/div[1]/div/div[2]/div[2]/a[1]
+# Click on Play Market icon
+    Click Element    xpath=/html/body/div[7]/div[3]/div/div[1]/div[4]/div[1]/div[1]/div[1]/div/div[2]/div[2]/ul[1]/li[3]/a/span[1]
+
+Switch to Google Play window 
+    Select Window    url=${url gp}
+# Click on Movies menu
+    Click Element    xpath=/html/body/div[1]/div[60]/div[1]/div/ul/li[3]/a/span/span[1]/span
+# Click on Genres drop down menu
+    Click Element    xpath=/html/body/div[1]/div[60]/div[5]/div/div/div[1]/div[3]/div[1]/button
+# Click on Animation menu
+    Click Element    xpath=/html/body/div[1]/div[60]/div[5]/div/div/div[1]/div[3]/div[3]/div/ul/li[2]/div/a
+
+Play first video 
+# Play first video
+    Click Element    xpath=/html/body/div[1]/div[60]/div[6]/div[2]/div/div[1]/div/div[1]/div/div[2]/div[1]/div/div[1]/a/span[2]/span
+# Wait 20 seconds
+    Sleep    20
+# Close Google Play window
+    Close Window
+
+Switch to Gmail window
+    Select Window    url=${url draft}
+
+Sign out from Gmail    
+# Click on drop down menu
+    Click Element    xpath=/html/body/div[7]/div[3]/div/div[1]/div[4]/div[1]/div[1]/div[1]/div/div[4]/div[1]/a 
+# Click on Sign out button
+    Click Element    xpath=/html/body/div[7]/div[3]/div/div[1]/div[4]/div[1]/div[1]/div[1]/div/div[4]/div[2]/div[3]/div[2]/a

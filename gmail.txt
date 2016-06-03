@@ -1,0 +1,55 @@
+*** Settings ***
+Documentation  A test suite with the multiple test cases for Gmail. 
+...            The tests has a workflow that is created using keywords from the 
+...            resource file.
+Metadata       Version    1.0
+Resource       resource.txt
+Suite Teardown    Close Browser
+
+***Variables***
+
+*** Test Cases ***
+Invalid_Login
+    [Tags]   t-1 
+    Open Browser To Login Page
+    Invalid Login Process
+    Close Browser
+
+Valid_Login
+    [Tags]    t-2
+    Open Browser To Login Page
+    Login Process 
+
+New_Message  
+    [Tags]    t-3 
+    Write new message
+
+Delete_Message
+    [Tags]    t-4
+    Delete written message
+
+Draft_Page
+    [Tags]    t-5
+    Check Terms text link 
+
+Apps_Window
+    [Tags]    t-6
+    Google Apps
+
+Google_Play_Window
+    [Tags]    t-7
+    Switch to Google Play window
+
+Animation_Мovies
+    [Tags]    t-8
+    Play first video
+
+Gmail_Window
+    [Tags]    t-9
+    Switch to Gmail window
+
+Sign_Out
+    [Tags]    t-10
+    Sign out from Gmail 
+
+*** Keywords ***

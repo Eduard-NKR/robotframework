@@ -1,0 +1,44 @@
+*** Settings ***
+Documentation  trrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
+...            a workflow that is created using keywords from the resource file.
+Resource       resource.txt
+Suite Teardown    Close Browser
+# Default Tags    t-1 
+
+***Variables***
+
+*** Test Cases ***
+Valid_Login
+    [Tags]    t-1
+    Open Browser To Login Page
+    Login Process 
+
+New_Message  
+    [Tags]    t-2 
+    Write new message
+
+Delete_Message
+    [Tags]    t-3
+    Delete written message
+
+Draft_Page
+    [Tags]    t-4
+    Check Terms text link 
+
+Apps_Window
+    [Tags]    t-5
+    Google Apps
+
+Google_Play_Window
+    [Tags]    t-6
+    Switch to Google Play window
+
+Gmail_Window
+    [Tags]    t-7
+    Switch to Gmail window
+
+Sign_Out
+    [Tags]    t-8
+    Sign out from Gmail 
+
+*** Keywords ***
